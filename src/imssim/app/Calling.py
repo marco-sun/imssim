@@ -34,10 +34,10 @@ class Calling:
         # 2002;session_no,progress,status,result,reason
         if rslt:
             rslt_tuple = rslt.split(';')[1].split(',')
-            self.progress = rslt_tuple[0]
-            self.status = rslt_tuple[1]
-            self.result = rslt_tuple[2]
-            self.reason = rslt_tuple[3]
+            self.progress = rslt_tuple[1]
+            self.status = rslt_tuple[2]
+            self.result = rslt_tuple[3]
+            self.reason = rslt_tuple[4]
         else:
             self.progress = progress
             self.status = status

@@ -13,7 +13,7 @@ ADDR = (HOST, PORT)
 def querydm(msg):
     """向拨测底层发送消息并等待结果（阻塞模式）
     """
-    data = None
+    data = ''
     try:
         tcpCliSock = socket(AF_INET, SOCK_STREAM)
         tcpCliSock.connect(ADDR)
