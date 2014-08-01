@@ -2,3 +2,4 @@ src/imssim/.idea/workspace.xml
 src/imssim/.idea/imssim.iml
 src/imssim/.idea/misc.xml
 *.pyc
+*.iml
