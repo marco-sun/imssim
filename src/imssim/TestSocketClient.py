@@ -6,7 +6,7 @@ import socket
 from socket import *
 
 HOST = 'localhost'
-PORT = 12345
+PORT = 12346
 BUFSIZE = 1024
 ADDR = (HOST, PORT)
 

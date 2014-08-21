@@ -12,6 +12,7 @@ ADDR = (HOST, PORT)
 
 class MyRequestHandler(SRH):
     def handle(self):
+        print self
         print '...connected from:', self.client_address
 
         recv = self.rfile.readline().strip()
@@ -24,7 +25,7 @@ class MyRequestHandler(SRH):
             self.wfile.write('%s\r\n' % self.handle1003(btuple[1]))
         else:
             print 'Unknown cmd: %s' % recv
-        #self.wfile.write('[%s] %s' % (ctime(), self.rfile.readline()))
+            #self.wfile.write('[%s] %s\r\n' % (ctime(), recv))
 
     def handle1001(self, param_line):
         btuple = param_line.split(',')
