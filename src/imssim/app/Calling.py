@@ -66,9 +66,9 @@ def getCalling(called_party, timeout, gateway_ip, gateway_port, account, passwor
     def_gateway_port = '5060'
     def_account = 'default@localhost'
     def_password = 'default_password'
-    conf_file = open(os.path.dirname(os.path.dirname(__file__))+"\\config.ini")
+    conf_file = open(os.path.dirname(os.path.dirname(__file__))+"/config.ini")
     for line in conf_file:
-        tuple_conf = line.strip('\n').split("=")
+        tuple_conf = line.strip('\n').strip('\r').split("=")
         if len(tuple_conf) == 2:
             if tuple_conf[0] == "timeout":
                 def_timeout = tuple_conf[1]

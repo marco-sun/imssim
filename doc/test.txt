@@ -3,3 +3,10 @@ http://127.0.0.1/calling?cmd_type=calling&called_party=999&timeout=10 &gateway_i
 http://127.0.0.1/calling?session_no=131&cmd_type=querycalling
 
 http://127.0.0.1/params?session_no=131&cmd_type=params
+
+
+http://192.168.203.21:78/calling?cmd_type=calling&called_party=999&timeout=10 &gateway_ip=216.34.22.9&gateway_port=5060&account=xiaohong@shtel.com.cn&password=4235
+
+http://192.168.203.21:78/calling?session_no=21&cmd_type=querycalling
+
+http://192.168.203.21:78/params?session_no=21&cmd_type=params
