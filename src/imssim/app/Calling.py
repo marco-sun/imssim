@@ -19,7 +19,7 @@ class Calling:
 
     def doCalling(self, called_party, timeout, gateway_ip, gateway_port, account, password):
         #1001;called_party,timeout,gateway_ip,gateway_port,account,password
-        msg = "1001;%s,%s,%s,%s,%s,%s" % (called_party, timeout, gateway_ip, gateway_port, account, password)
+        msg = "1001;%s,%s,%s,%s,+8621%s,%s" % (called_party, timeout, gateway_ip, gateway_port, account, password)
         rslt = csdm.querydm(msg)
         # 2001;status,result_code
         if rslt:
