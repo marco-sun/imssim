@@ -2,10 +2,21 @@
 # coding=utf-8
 __author__ = 'Marco'
 
+import os
 from socket import *
 
 HOST = 'localhost'
 PORT = 12346
+conf_file = open(os.path.dirname(os.path.dirname(__file__))+"/config.ini")
+for line in conf_file:
+    tuple_conf = line.strip('\n').strip('\r').split("=")
+    if len(tuple_conf) == 2:
+        if tuple_conf[0] == "term_host":
+            HOST = tuple_conf[1]
+        elif tuple_conf[0] == "term_port":
+            PORT = tuple_conf[1]
+conf_file.close()
+print 'LOAD TERM INFO: %s,%s' % (HOST, PORT)
 BUFSIZE = 10240
 ADDR = (HOST, PORT)
 

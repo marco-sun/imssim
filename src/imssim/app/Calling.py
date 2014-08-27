@@ -46,7 +46,7 @@ class Calling:
             self.reason = rslt_tuple[4]
         else:
             self.status = "0"
-            self.reason = "500"
+            self.reason = "1500"
 
 
 # 必选参数 called_party, 其他参数若空则从配置文件中获取
