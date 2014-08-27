@@ -12,10 +12,10 @@ class Calling:
 
     def __init__(self):
         self.session_no = '0'
-        self.progress = 'N/A'
-        self.status = 'N/A'
-        self.result = 'N/A'
-        self.reason = 'N/A'
+        self.progress = 'NA'
+        self.status = 'NA'
+        self.result = 'NA'
+        self.reason = '0'
 
     def doCalling(self, called_party, timeout, gateway_ip, gateway_port, account, password):
         #1001;called_party,timeout,gateway_ip,gateway_port,account,password
