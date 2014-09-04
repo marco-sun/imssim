@@ -3,6 +3,7 @@
 __author__ = 'Marco'
 
 import os
+import string
 from socket import *
 
 HOST = 'localhost'
@@ -14,9 +15,9 @@ for line in conf_file:
         if tuple_conf[0] == "term_host":
             HOST = tuple_conf[1]
         elif tuple_conf[0] == "term_port":
-            PORT = tuple_conf[1]
+            PORT = string.atoi(tuple_conf[1])
 conf_file.close()
-print 'LOAD TERM INFO: %s,%s' % (HOST, PORT)
+print 'LOAD TERM INFO: %s,%d' % (HOST, PORT)
 BUFSIZE = 10240
 ADDR = (HOST, PORT)
 
