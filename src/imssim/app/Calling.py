@@ -7,6 +7,8 @@ from util import convert_to_builtin_type
 import os
 
 import ClientSocket2DailingModule as csdm
+from tsm import Tsm
+from usm import Usm
 
 class Calling:
 
@@ -17,26 +19,30 @@ class Calling:
         self.result = 'NA'
         self.reason = '0'
 
-    def doCalling(self, called_party, timeout, gateway_ip, gateway_port, account, password):
+    def doCalling(self, workerid, called_party, timeout, gateway_ip, gateway_port, account, password):
         #1001;called_party,timeout,gateway_ip,gateway_port,account,password
         msg = "1001;%s,%s,%s,%s,+8621%s,%s" % (called_party, timeout, gateway_ip, gateway_port, account, password)
-        rslt = csdm.querydm(msg)
+        rslt = csdm.querydm(msg, workerid)
         # 2001;status,result_code
         if rslt:
             rslt_tuple = rslt.split(';')[1].split(',')
             self.status = rslt_tuple[0]
             if self.status == '1':
-                self.session_no = rslt_tuple[1]
+                self.session_no = workerid + rslt_tuple[1]
             else:
                 self.reason = rslt_tuple[1]
         else:
             self.status = "0"
             self.reason = "500"
+        return self.reason
 
     def doQueryCalling(self,session_no):
-        msg = "1002;%s" % session_no
+
+        inner_sid = session_no[2:]
+        worker_id = session_no[:2]
+        msg = "1002;%s" % inner_sid
         self.session_no = session_no
-        rslt = csdm.querydm(msg)
+        rslt = csdm.querydm(msg, worker_id)
         # 2002;session_no,progress,status,result,reason
         if rslt:
             rslt_tuple = rslt.split(';')[1].split(',')
@@ -51,7 +57,10 @@ class Calling:
 
 # 必选参数 called_party, 其他参数若空则从配置文件中获取
 def getCalling(called_party, timeout, gateway_ip, gateway_port, account, password):
-
+    """
+    如果主叫账号缺失，代表用内置测试号码呼叫被测用户，通过Tsm控制，
+    否则，代表用被测用户外呼特定号码，例如10000号，通过Usm控制
+    """
     c = Calling()
     # step1 参数检查
     if called_party == '':
@@ -64,8 +73,7 @@ def getCalling(called_party, timeout, gateway_ip, gateway_port, account, passwor
     def_timeout = '120'
     def_gateway_ip = '127.0.0.1'
     def_gateway_port = '5060'
-    def_account = 'default@localhost'
-    def_password = 'default_password'
+    def_password = '123456'
     conf_file = open(os.path.dirname(os.path.dirname(__file__))+"/config.ini")
     for line in conf_file:
         tuple_conf = line.strip('\n').strip('\r').split("=")
@@ -87,13 +95,35 @@ def getCalling(called_party, timeout, gateway_ip, gateway_port, account, passwor
         gateway_ip = def_gateway_ip
     if gateway_port == '':
         gateway_port = def_gateway_port
-    if account == '':
-        account = def_account
     if password == '':
         password = def_password
 
-    # step3 执行
-    c.doCalling(called_party, timeout, gateway_ip, gateway_port, account, password)
+    if account == '':
+        # step3a tsm处理
+        tsm = Tsm()
+        for (k, v) in tsm.sessions.items():
+            rslt = c.doCalling(k, called_party, timeout, gateway_ip, gateway_port, list(v)[0], list(v)[1])
+            if rslt != '1999': # 1999 代表拨测资源忙，因此轮训下一个拨测资源
+                break
+    else:
+        # step3b usm处理
+        final_worker = '0'
+        rslt = ''
+        # 首先看有无重复号码
+        usm = Usm()
+        final_worker = usm.checkCalling(account)
+        if final_worker != '0':
+            rslt = c.doCalling(final_worker, called_party, timeout, gateway_ip, gateway_port, account, password)
+        else:
+            # 其次轮训资源
+            for k in usm.sessions:
+                rslt = c.doCalling(k, called_party, timeout, gateway_ip, gateway_port, account, password)
+                if rslt != '1999': # 1999 代表拨测资源忙，因此轮训下一个拨测资源
+                    final_worker = k
+                    break
+        # 最后如有成功，则更新usm
+        if rslt == '0':
+            usm.nailCalling(final_worker, account)
 
     # step4 将calling对象作为结果对象以json格式返回
     s = json.dumps(c, default=convert_to_builtin_type, ensure_ascii=False)

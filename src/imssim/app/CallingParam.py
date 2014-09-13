@@ -16,8 +16,10 @@ class CallingParam:
 
 
 def getCallingParam(session_no):
-    msg = "1003;%s" % session_no
-    rslt = csdm.querydm(msg)
+    inner_sid = session_no[2:]
+    worker_id = session_no[:2]
+    msg = "1003;%s" % inner_sid
+    rslt = csdm.querydm(msg, worker_id)
     if rslt:
         # 2003;session_no;param1,val1;param2,val2;param3,val3;…
         rslt_tuple = rslt.split(';')[2:]

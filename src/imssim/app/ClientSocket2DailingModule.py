@@ -7,7 +7,7 @@ import string
 from socket import *
 
 HOST = 'localhost'
-PORT = 12346
+PORT = 1300
 conf_file = open(os.path.dirname(os.path.dirname(__file__))+"/config.ini")
 for line in conf_file:
     tuple_conf = line.strip('\n').strip('\r').split("=")
@@ -19,25 +19,24 @@ for line in conf_file:
 conf_file.close()
 print 'LOAD TERM INFO: %s,%d' % (HOST, PORT)
 BUFSIZE = 10240
-ADDR = (HOST, PORT)
 
 
-def querydm(msg):
+
+def querydm(msg, workerid):
     """向拨测底层发送消息并等待结果（阻塞模式）
     """
-    print 'Sending msg [%s]' % msg
+    addr = (HOST, PORT+int(workerid))
+    print 'To worker%s(%s,%d) Sending msg [%s]' % (workerid, HOST, PORT+int(workerid), msg)
     data = ''
     try:
         tcpCliSock = socket(AF_INET, SOCK_STREAM)
-        tcpCliSock.connect(ADDR)
+        tcpCliSock.connect(addr)
         tcpCliSock.send('%s\r\n' % msg)
         data = tcpCliSock.recv(BUFSIZE)
         if data:
             print data.strip()
         tcpCliSock.close()
     except Exception, e:
-        # (errno, err_msg) = arg
-        # print "Connect server failed: %s, errno=%d" % (err_msg, errno)
         print "Connect server failed: %s" % e
     ret = data.strip()
     print 'RECV msg <%s>' % ret
@@ -45,7 +44,7 @@ def querydm(msg):
 
 
 def test():
-    recv = querydm("")
+    recv = querydm("",'1')
     if recv:
         print "recv: [%s]" % recv
 
