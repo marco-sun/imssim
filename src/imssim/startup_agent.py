@@ -96,6 +96,23 @@ def atexit_fun():
     exc_type, exc_value, exc_tb = sys.exc_info()
     traceback.print_exception(exc_type, exc_value, exc_tb)
 
+
+def init_agents(us_count, ts_count):
+    process = 'notepad'# process name
+    a = GetAllTargetProcesses(process)
+    print a
+    for useless in a:
+        time.sleep(0.5)
+        Kill_Process(process)
+
+    import os
+    for x in range(us_count):
+        win32api.ShellExecute(0, 'Open', 'notepad.exe',
+                              'param.txt', '%s/us_agents/a%d' % (os.path.dirname(__file__), x), 1)
+    for x in range(ts_count):
+        win32api.ShellExecute(0, 'Open', 'notepad.exe',
+                              'param.txt', '%s/ts_agents/a%d' % (os.path.dirname(__file__), x), 1)
+
 # ***********************************************************************
 # ***********************************************************************
 if __name__ == "__main__":
