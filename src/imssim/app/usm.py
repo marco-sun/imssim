@@ -8,7 +8,7 @@ class Usm(Singleton):
     sessions = {}
 
     def __init__(self):
-        for x in range(10,20):
+        for x in range(10,13):
             self.sessions[str(x)] = '0'
 
     def checkCalling(self, calling):

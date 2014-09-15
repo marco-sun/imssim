@@ -98,7 +98,7 @@ def atexit_fun():
 
 
 def init_agents(us_count, ts_count):
-    process = 'notepad'# process name
+    process = 'winsockserver'# process name
     a = GetAllTargetProcesses(process)
     print a
     for useless in a:
@@ -106,12 +106,13 @@ def init_agents(us_count, ts_count):
         Kill_Process(process)
 
     import os
+
     for x in range(us_count):
-        win32api.ShellExecute(0, 'Open', 'notepad.exe',
-                              'param.txt', '%s/us_agents/a%d' % (os.path.dirname(__file__), x), 1)
+        win32api.ShellExecute(0, 'Open', '%s/us_agents/a%d/winsockserver.exe' % (os.path.dirname(__file__), x),
+                              '', '%s/us_agents/a%d' % (os.path.dirname(__file__), x), 1)
     for x in range(ts_count):
-        win32api.ShellExecute(0, 'Open', 'notepad.exe',
-                              'param.txt', '%s/ts_agents/a%d' % (os.path.dirname(__file__), x), 1)
+        win32api.ShellExecute(0, 'Open', '%s/ts_agents/a%d/winsockserver.exe' % (os.path.dirname(__file__), x),
+                              '', '%s/ts_agents/a%d' % (os.path.dirname(__file__), x), 1)
 
 # ***********************************************************************
 # ***********************************************************************

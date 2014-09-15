@@ -12,4 +12,4 @@ print tsm.sessions
 sa.init_agents(3, len(tsm.sessions))
 
 #app = Flask(__name__)
-app.run(port=80,debug = True)
+app.run(port=80, debug = True, use_reloader=False)
