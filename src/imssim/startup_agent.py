@@ -105,14 +105,28 @@ def init_agents(us_count, ts_count):
         time.sleep(0.5)
         Kill_Process(process)
 
-    import os
+    import os, string
+    host_ip = '192.168.202.189'
+    base_port = 1300
+    conf_file = open(os.path.dirname(__file__)+"/config.ini")
+    for line in conf_file:
+        tuple_conf = line.strip('\n').strip('\r').split("=")
+        if len(tuple_conf) == 2:
+            if tuple_conf[0] == "uac_host":
+                host_ip = tuple_conf[1]
+            elif tuple_conf[0] == "term_port":
+                base_port = string.atoi(tuple_conf[1])
+    conf_file.close()
+    host_ip = '127.0.0.1'
 
     for x in range(us_count):
+        print '%s %d' % (host_ip, base_port + (10+x)*100)
         win32api.ShellExecute(0, 'Open', '%s/us_agents/a%d/winsockserver.exe' % (os.path.dirname(__file__), x),
-                              '', '%s/us_agents/a%d' % (os.path.dirname(__file__), x), 1)
+                              '%s %d' % (host_ip, base_port + (10+x)*100), '%s/us_agents/a%d' % (os.path.dirname(__file__), x), 1)
     for x in range(ts_count):
+        print '%s %d' % (host_ip, base_port + (20+x)*100)
         win32api.ShellExecute(0, 'Open', '%s/ts_agents/a%d/winsockserver.exe' % (os.path.dirname(__file__), x),
-                              '', '%s/ts_agents/a%d' % (os.path.dirname(__file__), x), 1)
+                              '%s %d' % (host_ip, base_port + (20+x)*100), '%s/ts_agents/a%d' % (os.path.dirname(__file__), x), 1)
 
 # ***********************************************************************
 # ***********************************************************************

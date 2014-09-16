@@ -25,8 +25,8 @@ BUFSIZE = 10240
 def querydm(msg, workerid):
     """向拨测底层发送消息并等待结果（阻塞模式）
     """
-    addr = (HOST, PORT+int(workerid))
-    print 'To worker%s(%s,%d) Sending msg [%s]' % (workerid, HOST, PORT+int(workerid), msg)
+    addr = (HOST, PORT+int(workerid)*100)
+    print 'To worker%s(%s,%d) Sending msg [%s]' % (workerid, HOST, PORT+int(workerid)*100, msg)
     data = ''
     try:
         tcpCliSock = socket(AF_INET, SOCK_STREAM)
