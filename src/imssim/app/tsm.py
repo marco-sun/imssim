@@ -10,7 +10,7 @@ class Tsm(Singleton):
     def __init__(self):
         import os
         conf_file = open(os.path.dirname(os.path.dirname(__file__))+"/testnum.cfg")
-        test_work_id = 20
+        test_work_id = 10
         for line in conf_file:
             tuple_conf = line.strip('\n').strip('\r').split(",")
             if len(tuple_conf) == 2: ## calling number and password

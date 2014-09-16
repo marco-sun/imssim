@@ -29,6 +29,7 @@ class Calling:
             self.status = rslt_tuple[0]
             if self.status == '1':
                 self.session_no = workerid + rslt_tuple[1]
+                self.reason = '0'
             else:
                 self.reason = rslt_tuple[1]
         else:
