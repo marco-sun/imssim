@@ -89,12 +89,21 @@ def Kill_Process ( name ) :
         return False
 # ***********************************************************************
 
+def close_agents():
+    process = 'winsockserver'# process name
+    a = GetAllTargetProcesses(process)
+    print a
+    for useless in a:
+        time.sleep(0.5)
+        Kill_Process(process)
+
 @atexit.register
 def atexit_fun():
+    close_agents()
     print 'i am exit, stack track:'
-
     exc_type, exc_value, exc_tb = sys.exc_info()
     traceback.print_exception(exc_type, exc_value, exc_tb)
+
 
 def init_agents_ex(us_count, ts_count):
     process = 'winsockserver'# process name
