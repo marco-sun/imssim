@@ -99,8 +99,12 @@ def close_agents():
 
 @atexit.register
 def atexit_fun():
-    close_agents()
+    #close_agents()
+    import os
+    close_flag_file = open('%s/agents/shutdown.flg' % os.path.dirname(__file__), 'w')
+    close_flag_file.close()
     print 'i am exit, stack track:'
+
     exc_type, exc_value, exc_tb = sys.exc_info()
     traceback.print_exception(exc_type, exc_value, exc_tb)
 
