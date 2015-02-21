@@ -1,10 +1,6 @@
-#! /usr/bin/env python
-# coding=utf-8
-
 from app import app
 from app.usm import Usm
 from app.tsm import Tsm
-import startup_agent as sa
 import time
 
 usm = Usm()
@@ -12,12 +8,10 @@ tsm = Tsm()
 print 'Default test accounts are: ',
 print tsm.sessions
 
-# 从配置文件config.ini中获得服务端口，默认为80
 import os
 import sys
 import string
 srv_port = 80
-# 获取当前路径
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 print abspath
@@ -40,7 +34,6 @@ conf_file.close()
 
 print 'Each default account has one independent channel.',
 print 'And 3 more channels for explicit accounts.'
-sa.init_agents_ex(3, len(tsm.sessions))
 
 #app = Flask(__name__)
-app.run(port=srv_port, debug=True, use_reloader=False)
+app.run(host="0.0.0.0", port=srv_port, debug=True, use_reloader=False)

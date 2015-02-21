@@ -1,0 +1,59 @@
+<config>
+    <app_hosts>
+        <default>
+	        <am_proxy>
+		        <state_check_interval>5</state_check_interval>
+		        <proc_max_fail>3</proc_max_fail>
+		        <remote_agents>
+			        <access type="tcp_server" addr=":8889" single_session="false" />
+			        <gather type="tcp_server" addr=":8890" single_session="false" />
+		        </remote_agents>
+	        </am_proxy>
+	        <processes>
+		        <process>log_srvr</process>
+		        <process>testpjapp6 -an=a10 -rl=127.0.0.1:8891</process>
+	                <process>testpjapp6 -an=a11 -rl=127.0.0.1:8891</process>
+        	        <process>testpjapp6 -an=a20 -rl=127.0.0.1:8891</process>
+                	<process>testpjapp6 -an=a21 -rl=127.0.0.1:8891</process>
+               		<process>testpjapp6 -an=a22 -rl=127.0.0.1:8891</process>
+	        </processes>
+        </default>
+    </app_hosts>
+    <log_server>
+        <default>
+            <remote_agents>
+                <log_receive type="tcp_server" addr="127.0.0.1:8891" single_session="false"/>
+            </remote_agents>
+            <log_level>debug</log_level>
+            <store_path>log</store_path>
+            <file_prefix>log_</file_prefix>
+            <file_postfix>.log</file_postfix>
+            <file_max_size>1M</file_max_size>
+            <file_max_time>24h</file_max_time>
+            <store_max_size>80M</store_max_size>
+        </default>
+    </log_server>
+
+        <pjsua2_test6>
+                <a10>
+                        <local_port>5070</local_port>
+                        <cmd_port>1310</cmd_port>
+                </a10>
+                <a11>
+                        <local_port>5071</local_port>
+                        <cmd_port>1311</cmd_port>
+                </a11>
+                <a20>
+                        <local_port>5072</local_port>
+                        <cmd_port>1320</cmd_port>
+                </a20>
+                <a21>
+                        <local_port>5073</local_port>
+                        <cmd_port>1321</cmd_port>
+                </a21>
+                <a22>
+                        <local_port>5074</local_port>
+                        <cmd_port>1322</cmd_port>
+                </a22>
+        </pjsua2_test6>
+</config>

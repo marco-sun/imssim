@@ -4,16 +4,10 @@ __author__ = 'Marco'
 from MySingleton import Singleton
 
 class Usm(Singleton):
-    """
-    接口2的会话管理类，内部管理一个map，从workid映射到主叫号码
-    """
+
     sessions = {}
 
     def __init__(self):
-        """
-        从配置文件config.ini中获取显式呼叫的容许并发数，默认为3，
-        因此，默认的workid为20，21，22，初始主叫号码为0
-        """
         import os, string
         explicit_channum = 3
         conf_file = open(os.path.dirname(os.path.dirname(__file__))+"/config.ini")
@@ -28,9 +22,7 @@ class Usm(Singleton):
             self.sessions[str(x)] = '0'
 
     def checkCalling(self, calling):
-        """
-        根据主叫号码反查workid，找不到返回0
-        """
+
         candi = '0'
         self.objs_locker.acquire()
         for (k, v) in self.sessions.items():
@@ -41,9 +33,7 @@ class Usm(Singleton):
         return candi
 
     def nailCalling(self, workid, calling):
-        """
-        将workid和主叫号码关联
-        """
+
         self.objs_locker.acquire()
         self.sessions[workid] = calling
         self.objs_locker.release()
