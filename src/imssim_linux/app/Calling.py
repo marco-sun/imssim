@@ -27,7 +27,7 @@ class Calling:
             rslt_tuple = rslt.split(';')[1].split(',')
             self.status = rslt_tuple[0]
             if self.status == '1':
-                self.session_no = workerid + rslt_tuple[1]
+                self.session_no = str(int(workerid)*1000 + int(rslt_tuple[1]))
                 self.reason = '0'
             else:
                 self.reason = rslt_tuple[1]
@@ -38,7 +38,7 @@ class Calling:
 
     def doQueryCalling(self,session_no):
 
-        worker_id = session_no[:2]
+        worker_id = session_no[:1]
         inner_sid = session_no[2:]
         msg = "1002;%s" % inner_sid
         self.session_no = session_no

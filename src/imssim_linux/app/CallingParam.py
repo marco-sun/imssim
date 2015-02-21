@@ -16,8 +16,8 @@ class CallingParam:
 
 
 def getCallingParam(session_no):
+    worker_id = session_no[:1]
     inner_sid = session_no[2:]
-    worker_id = session_no[:2]
     msg = "1003;%s" % inner_sid
     rslt = csdm.querydm(msg, worker_id)
     if rslt:
