@@ -4,11 +4,10 @@ __author__ = 'Marco'
 
 from flask import json
 from util import convert_to_builtin_type
-import os
-
+from gdm import Gdm
 import ClientSocket2DailingModule as csdm
-from tsm import Tsm
-from usm import Usm
+from sm import Sm
+
 
 class Calling:
 
@@ -39,8 +38,8 @@ class Calling:
 
     def doQueryCalling(self,session_no):
 
-        inner_sid = session_no[2:]
         worker_id = session_no[:2]
+        inner_sid = session_no[2:]
         msg = "1002;%s" % inner_sid
         self.session_no = session_no
         rslt = csdm.querydm(msg, worker_id)
@@ -71,38 +70,17 @@ def getCalling(called_party, timeout, gateway_ip, gateway_port, account, passwor
         return s
 
     # step2 默认参数补齐
-    def_timeout = '120'
-    def_gateway_ip = '127.0.0.1'
-    def_gateway_port = '5060'
-    def_password = '123456'
-    conf_file = open(os.path.dirname(os.path.dirname(__file__))+"/config.ini")
-    for line in conf_file:
-        tuple_conf = line.strip('\n').strip('\r').split("=")
-        if len(tuple_conf) == 2:
-            if tuple_conf[0] == "timeout":
-                def_timeout = tuple_conf[1]
-            elif tuple_conf[0] == "gateway_ip":
-                def_gateway_ip = tuple_conf[1]
-            elif tuple_conf[0] == "gateway_port":
-                def_gateway_port = tuple_conf[1]
-            elif tuple_conf[0] == "account":
-                def_account = tuple_conf[1]
-            elif tuple_conf[0] == "password":
-                def_password = tuple_conf[1]
-    conf_file.close()
+    gdm = Gdm()
     if timeout == '':
-        timeout = def_timeout
+        timeout = str(gdm.default_timeout)
     if gateway_ip == '':
-        gateway_ip = def_gateway_ip
+        gateway_ip = gdm.uas_ip
     if gateway_port == '':
-        gateway_port = def_gateway_port
-    if password == '':
-        password = def_password
-
+        gateway_port = str(gdm.uas_port)
+    sm = Sm()
     if account == '':
         # step3a tsm处理
-        tsm = Tsm()
-        for (k, v) in tsm.sessions.items():
+        for (k, v) in sm.tsessions.items():
             rslt = c.doCalling(k, called_party, timeout, gateway_ip, gateway_port, list(v)[0], list(v)[1])
             if rslt != '1999': # 1999 代表拨测资源忙，因此轮训下一个拨测资源
                 break
@@ -111,20 +89,19 @@ def getCalling(called_party, timeout, gateway_ip, gateway_port, account, passwor
         final_worker = '0'
         rslt = ''
         # 首先看有无重复号码
-        usm = Usm()
-        final_worker = usm.checkCalling(account)
+        final_worker = sm.checkCalling(account)
         if final_worker != '0':
             rslt = c.doCalling(final_worker, called_party, timeout, gateway_ip, gateway_port, account, password)
         else:
             # 其次轮训资源
-            for k in usm.sessions:
+            for k in sm.usessions:
                 rslt = c.doCalling(k, called_party, timeout, gateway_ip, gateway_port, account, password)
                 if rslt != '1999': # 1999 代表拨测资源忙，因此轮训下一个拨测资源
                     final_worker = k
                     break
         # 最后如有成功，则更新usm
         if rslt == '0':
-            usm.nailCalling(final_worker, account)
+            sm.nailCalling(final_worker, account)
 
     # step4 将calling对象作为结果对象以json格式返回
     s = json.dumps(c, default=convert_to_builtin_type, ensure_ascii=False)
