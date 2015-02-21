@@ -1,4 +1,17 @@
 <config>
+    <cm>
+        <default>
+            <srv_port>82</srv_port>
+            <srv_ip>0.0.0.0</srv_ip>
+            <default_timeout>25</default_timeout>
+            <explicit_channum>3</explicit_channum>
+            <dm_baseport>1300</dm_baseport>
+            <uac_ip>0.0.0.0</uac_ip>
+            <uas_ip>118.85.214.1</uas_ip>
+            <uas_port>5060</uas_port>
+            <domain_name>sh.ctcims.cn</domain_name>
+        </default>
+    </cm>
     <app_hosts>
         <default>
 	        <am_proxy>
